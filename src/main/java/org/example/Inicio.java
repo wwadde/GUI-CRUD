@@ -69,21 +69,8 @@ public class Inicio extends JFrame{
             }
         }
 
-        String usuario = "su";
-        String contraseña = "Aa123456";
-
-        String cnnString =
-                "jdbc:sqlserver://myprimerserver.database.windows.net;"
-                        + "database=First-DB;"
-                        + "user=" + usuario +";"
-                        + "password=" + contraseña + ";"
-                        + "encrypt=true;"
-                        + "trustServerCertificate=false;"
-                        + "loginTimeout=30;";
-
-        System.out.println("Connecting...");
-        String sql = "SELECT * FROM estudiantes;";
-        SqlConnection.SelectAzureSQL(sql, cnnString);
+        SqlConnection sql = new SqlConnection();
+        sql.SelectAzureSQL();
 
         Inicio frame = new Inicio();
         frame.setVisible(true);
