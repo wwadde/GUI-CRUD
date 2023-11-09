@@ -1,4 +1,4 @@
-package org.example;
+package org.GUI;
 
 import javax.swing.*;
 import java.awt.event.*;

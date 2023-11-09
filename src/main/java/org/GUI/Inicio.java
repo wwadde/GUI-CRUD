@@ -1,9 +1,8 @@
-package org.example;
+package org.GUI;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.Connection;
 import java.sql.SQLException;
 
 public class Inicio extends JFrame{
