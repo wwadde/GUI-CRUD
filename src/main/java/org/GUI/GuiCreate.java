@@ -5,7 +5,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.awt.Color;
 
-public class GuiRegistrar extends JFrame{
+public class GuiCreate extends JFrame{
     private JPanel RegistroPanel;
     private JTextField ApellidoJText;
     private JTextField NombreJText;
@@ -19,7 +19,7 @@ public class GuiRegistrar extends JFrame{
 
     public static ArrayList<DatosEstudiante> listaEstudiantes = new ArrayList<>();
 
-    public GuiRegistrar(){
+    public GuiCreate(){
 
         setContentPane(RegistroPanel);
         setTitle("Registro de Estudiantes");
@@ -72,7 +72,7 @@ public class GuiRegistrar extends JFrame{
             @Override
             public void focusLost(FocusEvent e) {
                 super.focusLost(e);
-                if(ApellidoJText.getText().equals("")){
+                if(ApellidoJText.getText().isEmpty()){
                     ApellidoJText.setForeground(placeholderColor);
                     ApellidoJText.setText("Apellido");
 
@@ -133,7 +133,7 @@ public class GuiRegistrar extends JFrame{
             public void actionPerformed(ActionEvent e) {
 
                 if(NombreJText.getText().equals("") || ApellidoJText.getText().equals("") || CorreoJText.getText().equals("") || CodigoJText.getText().equals("") || NombreJText.getText().equals("Nombre") || ApellidoJText.getText().equals("Apellido") || CorreoJText.getText().equals("Correo") || CodigoJText.getText().equals("Codigo")){
-                    JOptionPane.showMessageDialog(GuiRegistrar.this,"Por favor llene todos los campos");
+                    JOptionPane.showMessageDialog(GuiCreate.this,"Por favor llene todos los campos");
                 }
                 else{
                     String nombre = NombreJText.getText();
@@ -141,9 +141,13 @@ public class GuiRegistrar extends JFrame{
                     String correo = CorreoJText.getText();
                     String codigo = CodigoJText.getText();
 
+
+
+                    SqlConnection sqlConnection = new SqlConnection();
+                    sqlConnection.insertarDatos(codigo,nombre,apellido,correo);
                     DatosEstudiante formato = new DatosEstudiante(nombre,apellido,correo,codigo); //creo un objeto de la clase DatosEstudiante
                     listaEstudiantes.add(formato); //lo agrego al array de objetos que instancié llamado listaEstudiantes
-                    JOptionPane.showMessageDialog(GuiRegistrar.this,"Registrado con exito");
+                    JOptionPane.showMessageDialog(GuiCreate.this,"Registrado con exito");
                     dispose();
                 }
 

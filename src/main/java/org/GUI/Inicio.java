@@ -26,6 +26,8 @@ public class Inicio extends JFrame{
 
         BienvenidaLabel.setForeground(Color.WHITE);
 
+        SqlConnection sql = new SqlConnection();
+
 
 
 
@@ -34,7 +36,7 @@ public class Inicio extends JFrame{
             public void actionPerformed(ActionEvent e) {
 
 
-                GuiRegistrar RegistroFrame = new GuiRegistrar(); //crea el frame de registro Y lo superpone al frame de inicio
+                GuiCreate RegistroFrame = new GuiCreate(); //crea el frame de registro Y lo superpone al frame de inicio
                 RegistroFrame.setVisible(true);
                 RegistroFrame.requestFocusInWindow();
 
@@ -45,8 +47,10 @@ public class Inicio extends JFrame{
         VerRegistros.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GuiRegistrar importararraylist = new GuiRegistrar(); //importa el arraylist de GuiRegistrar
-                GuiRegistrar.mostrarEstudiantes(); //muestra los estudiantes del arraylist
+                GuiCreate importararraylist = new GuiCreate(); //importa el arraylist de GuiCreate
+                GuiCreate.mostrarEstudiantes(); //muestra los estudiantes del arraylist
+                sql.selectDatos("SELECT * FROM estudiantes");
+
             }
         });
 
@@ -68,8 +72,6 @@ public class Inicio extends JFrame{
             }
         }
 
-        SqlConnection sql = new SqlConnection();
-        sql.SelectAzureSQL();
 
         Inicio frame = new Inicio();
         frame.setVisible(true);
