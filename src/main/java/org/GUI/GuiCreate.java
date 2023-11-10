@@ -166,7 +166,7 @@ public class GuiCreate extends JFrame{
 
     }
 
-    public static void mostrarEstudiantes(){
+    public static void mostrarEstudiantes(){ //dejarla por el momento
         for (DatosEstudiante estudiante : listaEstudiantes){
             JOptionPane.showMessageDialog(null,estudiante.getNombre() + " " + estudiante.getApellido() + " " + estudiante.getCorreo() + " " + estudiante.getCodigo());
         }
