@@ -1,10 +1,14 @@
 package org.GUI;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.util.Properties;
+import java.util.Vector;
+
 //import creds.Mycreds existe la opcion de tener las credenciales en otra clase por seguridad, buenas practicas
 public class SqlConnection {
 
@@ -40,27 +44,39 @@ public class SqlConnection {
         }
     }
 
-    public void selectDatos(String query) {
+    public TableModel selectDatos() {
         String cnnString = creds.getProperty("db.url");
+        String query = "SELECT est_nombre, est_apellido, est_codigo, est_correo FROM dbo.estudiantes;";
 
         try (Connection cnn = DriverManager.getConnection(cnnString);
              Statement statement = cnn.createStatement()) {
 
             ResultSet resultSet = statement.executeQuery(query);
 
-            while (resultSet.next()) {
-                String codigo = resultSet.getString("est_codigo");
-                String nombre = resultSet.getString("est_nombre");
-                String apellido = resultSet.getString("est_apellido");
-                String correo = resultSet.getString("est_correo");
+            // Crear un modelo de tabla para almacenar los datos
+            DefaultTableModel modelo = new DefaultTableModel();
+            modelo.addColumn("Nombre");
+            modelo.addColumn("Apellido");
+            modelo.addColumn("Codigo");
+            modelo.addColumn("Correo");
 
-                System.out.println("Codigo: " + codigo);
-                System.out.println("Nombre: " + nombre);
-                System.out.println("Correo: " + correo);
+
+            while (resultSet.next()) {
+                Vector fila = new Vector();
+                fila.add(resultSet.getString("est_nombre"));
+                fila.add(resultSet.getString("est_apellido"));
+                fila.add(resultSet.getString("est_codigo"));
+                fila.add(resultSet.getString("est_correo"));
+                modelo.addRow(fila);
             }
+
+            return modelo;
+
+
 
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
     }
 }
