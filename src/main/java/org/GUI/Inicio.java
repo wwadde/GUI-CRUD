@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.SQLException;
 
+
 public class Inicio extends JFrame{
 
     private JPanel PanelPrincipal;
@@ -47,9 +48,10 @@ public class Inicio extends JFrame{
         VerRegistros.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GuiCreate importararraylist = new GuiCreate(); //importa el arraylist de GuiCreate
-                GuiCreate.mostrarEstudiantes(); //muestra los estudiantes del arraylist
-                sql.selectDatos("SELECT * FROM estudiantes");
+
+                GuiMostrar MostrarFrame = new GuiMostrar();
+                MostrarFrame.setVisible(true);
+                MostrarFrame.requestFocusInWindow();
 
             }
         });
@@ -57,7 +59,7 @@ public class Inicio extends JFrame{
 
     }
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) {
 
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
