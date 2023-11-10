@@ -49,9 +49,9 @@ public class SqlConnection {
         String query = "SELECT est_nombre, est_apellido, est_codigo, est_correo FROM dbo.estudiantes;";
 
         try (Connection cnn = DriverManager.getConnection(cnnString);
-             Statement statement = cnn.createStatement()) {
+             Statement statement = cnn.createStatement(); ResultSet resultSet = statement.executeQuery(query)) {
 
-            ResultSet resultSet = statement.executeQuery(query);
+
 
             // Crear un modelo de tabla para almacenar los datos
             DefaultTableModel modelo = new DefaultTableModel();
