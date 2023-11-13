@@ -18,7 +18,7 @@ public class SqlConnection {
 
     public SqlConnection(){
         try {
-            FileInputStream input = new FileInputStream("config.properties"); //que hace exactamente el new
+            FileInputStream input = new FileInputStream("config.properties"); //que hace exactamente el new, siempre se usa con clases? en lugar de interfaces
             creds.load(input);
         } catch (IOException e) {
             e.printStackTrace();
@@ -30,7 +30,7 @@ public class SqlConnection {
         String sqlInsert = "INSERT INTO dbo.estudiantes (est_codigo,est_nombre, est_apellido, est_correo) VALUES (?,?,?,?);";
 
         try (Connection cnn = DriverManager.getConnection(cnnString);
-             PreparedStatement preparedStatement = cnn.prepareStatement(sqlInsert)) { //al instanciar la clase ese = es de asignacion?
+             PreparedStatement preparedStatement = cnn.prepareStatement(sqlInsert)) { //al instanciar la interfaz ese = es de asignacion?, se manejan dos interfaces instancia del preparedstatement e instancia de connection
 
             preparedStatement.setString(1, codigo);
             preparedStatement.setString(2, nombre);
