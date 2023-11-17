@@ -4,33 +4,41 @@ package org.GUI;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.sql.*;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+
 import java.util.Properties;
 import java.util.Vector;
 
-//import creds.Mycreds existe la opcion de tener las credenciales en otra clase por seguridad, buenas practicas
 public class SqlConnection {
 
     private Properties creds = new Properties();
 
 
-    public SqlConnection(){
+    public SqlConnection() {
         try {
-            FileInputStream input = new FileInputStream("config.properties"); //que hace exactamente el new, siempre se usa con clases? en lugar de interfaces
-            creds.load(input);
+            FileInputStream input = new FileInputStream("config.properties");
+            creds.load(input); //cargar las credenciales mediante la lectura que hace clase FileInputStream del archivo config.properties
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void insertarDatos(String codigo, String nombre, String apellido, String correo) {
-        String cnnString = creds.getProperty("db.url");
+        String connectionString = creds.getProperty("db.url");
         String sqlInsert = "INSERT INTO dbo.estudiantes (est_codigo,est_nombre, est_apellido, est_correo) VALUES (?,?,?,?);";
 
-        try (Connection cnn = DriverManager.getConnection(cnnString);
-             PreparedStatement preparedStatement = cnn.prepareStatement(sqlInsert)) { //al instanciar la interfaz ese = es de asignacion?, se manejan dos interfaces instancia del preparedstatement e instancia de connection
+        try (Connection cnn = DriverManager.getConnection(connectionString);
+             PreparedStatement preparedStatement = cnn.prepareStatement(sqlInsert)) {
 
             preparedStatement.setString(1, codigo);
             preparedStatement.setString(2, nombre);
@@ -46,12 +54,11 @@ public class SqlConnection {
     }
 
     public TableModel selectDatos() {
-        String cnnString = creds.getProperty("db.url");
+        String connectionString = creds.getProperty("db.url");
         String query = "SELECT est_nombre, est_apellido, est_codigo, est_correo FROM dbo.estudiantes;";
 
-        try (Connection cnn = DriverManager.getConnection(cnnString);
+        try (Connection cnn = DriverManager.getConnection(connectionString);
              Statement statement = cnn.createStatement(); ResultSet resultSet = statement.executeQuery(query)) {
-
 
 
             // Crear un modelo de tabla para almacenar los datos
@@ -63,7 +70,7 @@ public class SqlConnection {
 
 
             while (resultSet.next()) {
-                Vector fila = new Vector();
+                Vector fila = new Vector(); //probar ejemplos de vectores
                 fila.add(resultSet.getString("est_nombre"));
                 fila.add(resultSet.getString("est_apellido"));
                 fila.add(resultSet.getString("est_codigo"));
@@ -74,6 +81,47 @@ public class SqlConnection {
             return modelo;
 
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    TableModel buscarDato(String dato) {
+        String connectionString = creds.getProperty("db.url");
+        String query = "SELECT * FROM dbo.estudiantes WHERE est_nombre LIKE ? OR est_apellido LIKE ? OR est_codigo LIKE ? OR est_correo LIKE ?;"; //define la consulta utilizando el operador LIKE para buscar coincidencias
+
+        try (Connection cnn = DriverManager.getConnection(connectionString);
+             PreparedStatement preparedStatement = cnn.prepareStatement(query)) {
+
+
+            ResultSetMetaData metaData = preparedStatement.getMetaData(); //obtiene los metadatos de la consulta mediante el preparedStatement pero también se podría hacer con el ResultSet
+
+            for (int i = 1; i <= metaData.getColumnCount(); i++) {
+
+                preparedStatement.setString(i, "%" + dato + "%"); //el % es para que busque cualquier coincidencia
+            }
+
+            try(ResultSet resultSet = preparedStatement.executeQuery()){
+
+                DefaultTableModel modelo = new DefaultTableModel();
+
+
+                modelo.addColumn("Nombre");
+                modelo.addColumn("Apellido");
+                modelo.addColumn("Codigo");
+                modelo.addColumn("Correo");
+
+                // Agregar las filas al modelo
+                while (resultSet.next()) {
+                    Object[] row = new Object[metaData.getColumnCount()];
+                    for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                        row[i - 1] = resultSet.getObject(i); //indices de columnas resultset empiezan en 1 y los de array en 0
+                    }
+                    modelo.addRow(row);
+                }
+                return modelo;
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
