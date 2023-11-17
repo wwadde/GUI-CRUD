@@ -3,7 +3,6 @@ package org.GUI;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.SQLException;
 
 
 public class Inicio extends JFrame{
@@ -50,8 +49,10 @@ public class Inicio extends JFrame{
             public void actionPerformed(ActionEvent e) {
 
                 GuiMostrar MostrarFrame = new GuiMostrar();
+
                 MostrarFrame.setVisible(true);
                 MostrarFrame.requestFocusInWindow();
+
 
             }
         });
@@ -77,5 +78,6 @@ public class Inicio extends JFrame{
 
         Inicio frame = new Inicio();
         frame.setVisible(true);
+
     }
 }
