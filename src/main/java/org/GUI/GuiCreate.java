@@ -136,10 +136,10 @@ public class GuiCreate extends JFrame{
                     JOptionPane.showMessageDialog(GuiCreate.this,"Por favor llene todos los campos");
                 }
                 else{
-                    String nombre = NombreJText.getText();
-                    String apellido = ApellidoJText.getText();
-                    String correo = CorreoJText.getText();
-                    String codigo = CodigoJText.getText();
+                    String nombre = NombreJText.getText().toUpperCase();
+                    String apellido = ApellidoJText.getText().toUpperCase();
+                    String correo = CorreoJText.getText().toUpperCase();
+                    String codigo = CodigoJText.getText().toUpperCase();
 
 
 
