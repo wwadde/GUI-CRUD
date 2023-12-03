@@ -20,7 +20,7 @@ public class GuiMostrar extends JFrame {
         setContentPane(panelPrincipal);
         setTitle("Mostrar Estudiantes");
         setBounds(500, 300, 800, 300);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
 

@@ -147,7 +147,7 @@ public class GuiCreate extends JFrame{
                     sqlConnection.insertarDatos(codigo,nombre,apellido,correo);
                     DatosEstudiante formato = new DatosEstudiante(nombre,apellido,correo,codigo); //creo un objeto de la clase DatosEstudiante
                     listaEstudiantes.add(formato); //lo agrego al array de objetos que instancié llamado listaEstudiantes
-                    JOptionPane.showMessageDialog(GuiCreate.this,"Registrado con exito");
+
                     dispose();
                 }
 

@@ -1,7 +1,7 @@
 package org.GUI;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
 import java.awt.event.*;
 
 
@@ -26,7 +26,6 @@ public class Inicio extends JFrame{
 
         BienvenidaLabel.setForeground(Color.WHITE);
 
-        SqlConnection sql = new SqlConnection();
 
 
 

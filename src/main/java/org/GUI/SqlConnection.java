@@ -46,7 +46,7 @@ public class SqlConnection {
             preparedStatement.setString(4, correo);
 
             preparedStatement.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Datos insertados correctamente.");
+            JOptionPane.showMessageDialog(null,"Registrado con exito");
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -87,7 +87,7 @@ public class SqlConnection {
         }
     }
 
-    TableModel buscarDato(String dato) {
+    public TableModel buscarDato(String dato) {
         String connectionString = creds.getProperty("db.url");
         String query = "SELECT * FROM dbo.estudiantes WHERE est_nombre LIKE ? OR est_apellido LIKE ? OR est_codigo LIKE ? OR est_correo LIKE ?;"; //define la consulta utilizando el operador LIKE para buscar coincidencias
 
