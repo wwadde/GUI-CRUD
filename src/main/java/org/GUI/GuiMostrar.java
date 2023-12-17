@@ -32,7 +32,9 @@ public class GuiMostrar extends JFrame {
         searchInput.setText("Ingrese el dato del estudiante a buscar");
 
         MostrarTodoBtn.setText("Mostrar todos los registros de la base de datos");
-        tablaEstudiantes.setDefaultEditor(Object.class, null);
+        tablaEstudiantes.setDefaultEditor(Object.class, null); // Para que no se pueda editar la tabla
+
+        SqlConnection sql = new SqlConnection();
 
 
         searchInput.addFocusListener(new FocusListener() {
@@ -61,7 +63,7 @@ public class GuiMostrar extends JFrame {
 
         });
 
-        SqlConnection sql = new SqlConnection();
+
         buscarBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
