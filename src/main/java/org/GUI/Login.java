@@ -4,7 +4,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-public class Login extends JFrame{
+public class Login extends JFrame {
     private JPanel panelMadre;
     private JPanel panelContenido;
     private JPanel panelBotones;
@@ -22,29 +22,32 @@ public class Login extends JFrame{
     private JLabel errorPassLabel;
     Color blancoColor = new Color(255, 255, 255, 202);
     Color grisColor = new Color(255, 255, 255, 89);
+    Color azulColor = new Color(12, 106, 225, 186);
 
-    private void initComponentes(){
+    private void initComponentes() {
 
         panelMadre = new JPanel(new BorderLayout());
-        panelContenido = new JPanel(new GridBagLayout());
+        panelContenido = new JPanel(new BorderLayout());
         panelImagen = new JPanel(new GridLayout());
-        panelDatos = new JPanel(new GridLayout(7, 1));
+        panelDatos = new JPanel(new GridBagLayout());
         panelBotones = new JPanel();
-        panelBotones.setLayout(new BoxLayout(panelBotones, BoxLayout.X_AXIS));
-        passwordField = new JPasswordField();
-        usuarioTF = new JTextField();
-        ingresarBtn = new JButton("Ingresar");
-        registrarBtn = new JButton("Registrarse");
-        inicioLabel = new JLabel("Inicio de sesion");
-        usuarioLabel = new JLabel("Usuario");
-        passwordLabel = new JLabel("Contraseña");
-
-        errorUserLabel = new JLabel("aaaaaaaaa");
-        errorPassLabel = new JLabel("aaaaaaaaa");
+        panelBotones.setLayout(new BoxLayout(panelBotones, BoxLayout.X_AXIS)); //para que los botones queden uno al lado del otro
 
 
         ImageIcon icon = new ImageIcon("src/resources/Imagenes/login.png");
         imagenLabel = new JLabel(icon);
+        inicioLabel = new JLabel("Inicio de sesion");
+        usuarioLabel = new JLabel("Usuario");
+        usuarioTF = new JTextField();
+        errorUserLabel = new JLabel("");
+        passwordLabel = new JLabel("Contraseña");
+        passwordField = new JPasswordField();
+        errorPassLabel = new JLabel("");
+        ingresarBtn = new JButton("Ingresar");
+        registrarBtn = new JButton("Registrarse");
+
+
+
 
 
         panelMadre.setBackground(grisColor);
@@ -56,83 +59,110 @@ public class Login extends JFrame{
         panelImagen.add(imagenLabel);
         panelImagen.setBackground(blancoColor);
 
-        panelDatos.add(inicioLabel);
-        panelDatos.add(usuarioLabel);
-        panelDatos.add(usuarioTF);
-        panelDatos.add(errorUserLabel);
-        panelDatos.add(passwordLabel);
-        panelDatos.add(passwordField);
-        panelDatos.add(errorPassLabel);
-        panelDatos.setBackground(blancoColor);
 
         panelBotones.add(registrarBtn);
         panelBotones.add(Box.createVerticalStrut(35));
         panelBotones.add(Box.createHorizontalGlue());
         panelBotones.add(ingresarBtn);
-        panelBotones.setBackground(blancoColor);
+
+        panelContenido.add(panelImagen, BorderLayout.NORTH);
+        panelContenido.add(panelDatos, BorderLayout.CENTER);
+        panelContenido.add(panelBotones, BorderLayout.SOUTH);
 
     }
 
-    private void configurarDiseño(){
+    private void configurarDiseño() {
+
+        panelImagen.setBackground(blancoColor);
+        panelDatos.setBackground(blancoColor);
+        panelBotones.setBackground(blancoColor);
 
         inicioLabel.setHorizontalAlignment(JLabel.CENTER);
         inicioLabel.setFont(new Font("Arial", Font.BOLD, 20));
         usuarioLabel.setHorizontalAlignment(JLabel.CENTER);
+        usuarioLabel.setFont(new Font("Arial", Font.BOLD, 15));
         passwordLabel.setHorizontalAlignment(JLabel.CENTER);
+        passwordLabel.setFont(new Font("Arial", Font.BOLD, 15));
+        usuarioTF.setFont(new Font("Arial", Font.PLAIN, 13));
+        passwordField.setFont(new Font("Arial", Font.PLAIN, 13));
+        usuarioTF.setPreferredSize(new Dimension(0, 30));
+        passwordField.setPreferredSize(new Dimension(0, 30));
 
         errorUserLabel.setForeground(new Color(255, 0, 0, 100));
-        errorUserLabel.setFont(new Font("Arial", Font.BOLD, 13));
+        errorUserLabel.setFont(new Font("Arial", Font.BOLD, 11));
 
         errorPassLabel.setForeground(new Color(255, 0, 0, 100));
-        errorPassLabel.setFont(new Font("Arial", Font.BOLD, 13));
+        errorPassLabel.setFont(new Font("Arial", Font.BOLD, 11));
 
-        errorUserLabel.setOpaque(true);
-        errorPassLabel.setOpaque(true);
-        errorPassLabel.setBackground(Color.BLACK);
-        errorUserLabel.setBackground(Color.BLACK);
+        ingresarBtn.setBackground(azulColor);
+        ingresarBtn.setForeground(Color.WHITE);
+        ingresarBtn.setFont(new Font("Arial", Font.BOLD, 15));
+        ingresarBtn.setFocusPainted(false);
 
+        registrarBtn.setContentAreaFilled(false);
+        registrarBtn.setBorderPainted(false);
+        registrarBtn.setOpaque(false);
+        registrarBtn.setForeground(azulColor);
+        registrarBtn.setFont(new Font("Arial", Font.BOLD, 15));
+        registrarBtn.setFocusPainted(false);
 
+        //Configuracion del panelDatos
         GridBagConstraints gbc = new GridBagConstraints();
-
+        gbc.insets = new Insets(5, 0, 5, 0); //espacio entre los elementos del panelDatos
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1; //ancho de los elementos del panelDatos
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.gridwidth = 1;
-        gbc.gridheight = 1;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-        gbc.fill = GridBagConstraints.BOTH;
-        panelContenido.add(panelImagen, gbc);
+        gbc.gridwidth = 2;
+        panelDatos.add(inicioLabel, gbc);
 
         gbc.gridy = 1;
-        gbc.gridheight = 2;
-        panelContenido.add(panelDatos, gbc);
+        gbc.gridwidth = 1;
+        panelDatos.add(usuarioLabel, gbc);
 
+        gbc.insets = new Insets(5, 0, 0, 0);
+
+        gbc.gridy = 2;
+        panelDatos.add(usuarioTF, gbc);
+
+        gbc.insets = new Insets(0, 0, 5, 0);
         gbc.gridy = 3;
-        gbc.gridheight = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        panelContenido.add(panelBotones, gbc);
-        panelContenido.setBorder(new EmptyBorder(0, 20, 0, 20));
+        panelDatos.add(errorUserLabel, gbc);
+
+        gbc.insets = new Insets(5, 0, 5, 0);
+        gbc.gridy = 4;
+        panelDatos.add(passwordLabel, gbc);
+
+        gbc.insets = new Insets(5, 0, 0, 0);
+
+        gbc.gridy = 5;
+        panelDatos.add(passwordField, gbc);
+        gbc.insets = new Insets(0, 0, 0, 0);
+
+        gbc.gridy = 6;
+        panelDatos.add(errorPassLabel, gbc);
+
+        panelImagen.setBorder(new EmptyBorder(22, 0, 0, 0));
+        panelDatos.setBorder(new EmptyBorder(0, 22, 0, 22));
+        panelBotones.setBorder(new EmptyBorder(11, 22, 22, 22));
 
 
     }
 
-    public Login(){
+    public Login() {
 
         initComponentes();
 
         setContentPane(panelMadre);
         setTitle("Login");
-        setSize(500, 500);
+        setSize(600, 550);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
         configurarDiseño();
 
 
-
-
     }
-
 
 
     public static void main(String[] args) {
