@@ -24,6 +24,55 @@ public class Login extends JFrame {
     Color grisColor = new Color(255, 255, 255, 89);
     Color azulColor = new Color(12, 106, 225, 186);
 
+
+    public Login() {
+
+        initComponentes();
+
+        setContentPane(panelMadre);
+        setTitle("Login");
+        setSize(600, 550);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        configurarDiseño();
+
+        registrarBtn.addActionListener(e -> {
+            GuiCreate registro = new GuiCreate();
+            registro.setVisible(true);
+            registro.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        });
+
+        ingresarBtn.addActionListener(e -> {
+            SqlConnection sqlConnection = new SqlConnection();
+            String usuario = usuarioTF.getText();
+            String password = String.valueOf(passwordField.getPassword());
+
+            if (usuario.equals("") || password.equals("")) {
+                JOptionPane.showMessageDialog(null, "Por favor ingrese todos los datos");
+            } else {
+                if (sqlConnection.login(usuario, password)) {
+                    GuiMostrar mostrar = new GuiMostrar();
+                    mostrar.setVisible(true);
+                    mostrar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
+                }
+            }
+        });
+
+
+    }
+
+
+    public static void main(String[] args) {
+        Login frame = new Login();
+        frame.setVisible(true);
+
+    }
+
     private void initComponentes() {
 
         panelMadre = new JPanel(new BorderLayout());
@@ -149,25 +198,4 @@ public class Login extends JFrame {
 
     }
 
-    public Login() {
-
-        initComponentes();
-
-        setContentPane(panelMadre);
-        setTitle("Login");
-        setSize(600, 550);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
-
-        configurarDiseño();
-
-
-    }
-
-
-    public static void main(String[] args) {
-        Login frame = new Login();
-        frame.setVisible(true);
-
-    }
 }

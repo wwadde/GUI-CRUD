@@ -128,4 +128,29 @@ public class SqlConnection {
             return null;
         }
     }
+
+    public boolean login(String usuario, String password) {
+        String connectionString = creds.getProperty("db.url");
+        String query = "SELECT * FROM dbo.usuarios WHERE usuario = ? AND password = ?;";
+
+        try (Connection cnn = DriverManager.getConnection(connectionString);
+             PreparedStatement preparedStatement = cnn.prepareStatement(query)) {
+
+            preparedStatement.setString(1, usuario);
+            preparedStatement.setString(2, password);
+
+            try(ResultSet resultSet = preparedStatement.executeQuery()){
+
+                if (resultSet.next()) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

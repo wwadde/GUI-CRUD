@@ -1,9 +1,9 @@
 package org.GUI;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-import java.awt.Color;
 
 public class GuiCreate extends JFrame{
     private JPanel RegistroPanel;
@@ -18,12 +18,14 @@ public class GuiCreate extends JFrame{
     private final Color textColor = Color.BLACK; // Color del texto
 
     public static ArrayList<DatosEstudiante> listaEstudiantes = new ArrayList<>();
+    Color azulColor = new Color(12, 106, 225, 186);
+
 
     public GuiCreate(){
 
         setContentPane(RegistroPanel);
         setTitle("Registro de Estudiantes");
-        setBounds(500,300,500,300);
+        setSize(600,550);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -36,6 +38,18 @@ public class GuiCreate extends JFrame{
         ApellidoJText.setForeground(placeholderColor);
         CorreoJText.setForeground(placeholderColor);
         CodigoJText.setForeground(placeholderColor);
+
+        EnviarRegistroButton.setBackground(azulColor);
+        EnviarRegistroButton.setForeground(Color.WHITE);
+        EnviarRegistroButton.setFont(new Font("Arial", Font.BOLD, 15));
+        EnviarRegistroButton.setFocusPainted(false);
+
+        RetrocederButton.setBackground(azulColor);
+        RetrocederButton.setForeground(Color.WHITE);
+        RetrocederButton.setFont(new Font("Arial", Font.BOLD, 15));
+        RetrocederButton.setFocusPainted(false);
+
+
 
         NombreJText.addFocusListener(new FocusAdapter() {
             @Override
