@@ -24,6 +24,8 @@ public class Login extends JFrame {
     Color grisColor = new Color(255, 255, 255, 89);
     Color azulColor = new Color(12, 106, 225, 186);
 
+    Color errorRojo = new Color(255, 0, 0, 100);
+
 
     public Login() {
 
@@ -137,10 +139,10 @@ public class Login extends JFrame {
         usuarioTF.setPreferredSize(new Dimension(0, 30));
         passwordField.setPreferredSize(new Dimension(0, 30));
 
-        errorUserLabel.setForeground(new Color(255, 0, 0, 100));
+        errorUserLabel.setForeground(errorRojo);
         errorUserLabel.setFont(new Font("Arial", Font.BOLD, 11));
 
-        errorPassLabel.setForeground(new Color(255, 0, 0, 100));
+        errorPassLabel.setForeground(errorRojo);
         errorPassLabel.setFont(new Font("Arial", Font.BOLD, 11));
 
         ingresarBtn.setBackground(azulColor);
@@ -197,5 +199,6 @@ public class Login extends JFrame {
 
 
     }
+
 
 }

@@ -1,6 +1,7 @@
 package org.GUI;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -13,6 +14,12 @@ public class GuiCreate extends JFrame{
     private JTextField CodigoJText;
     private JButton EnviarRegistroButton;
     private JButton RetrocederButton;
+    private JPanel panelNombre;
+    private JPanel panelApellido;
+    private JPanel panelCorreo;
+    private JPanel panelCodigo;
+    private JPanel panelCancelarBtn;
+    private JPanel panelRegistrarBtn;
 
     private final Color placeholderColor = Color.gray; // Color del placeholder
     private final Color textColor = Color.BLACK; // Color del texto
@@ -49,8 +56,35 @@ public class GuiCreate extends JFrame{
         RetrocederButton.setFont(new Font("Arial", Font.BOLD, 15));
         RetrocederButton.setFocusPainted(false);
 
+        JLayeredPane nombreLayered = new JLayeredPane();
+        JLayeredPane apellidoLayered = new JLayeredPane();
+        JLayeredPane correoLayered = new JLayeredPane();
+        JLayeredPane codigoLayered = new JLayeredPane();
+
+        JLabel labelNombre = new JLabel("Nombre ");
+        JLabel labelApellido = new JLabel("Apellido ");
+        JLabel labelCorreo = new JLabel("Correo ");
+        JLabel labelCodigo = new JLabel("Codigo ");
+
+        nombreLayered.add(labelNombre,0);
+        nombreLayered.add(NombreJText,1);
+
+        apellidoLayered.add(labelApellido,0);
+        apellidoLayered.add(ApellidoJText,1);
+
+        correoLayered.add(labelCorreo,0);
+        correoLayered.add(CorreoJText,1);
+
+        codigoLayered.add(labelCodigo,0);
+        codigoLayered.add(CodigoJText,1);
 
 
+
+
+
+        //TODO agregar los paneles con sus respectivos JLayaredPane
+
+        /*
         NombreJText.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -72,6 +106,9 @@ public class GuiCreate extends JFrame{
                 }
             }
         });
+
+
+
         ApellidoJText.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -136,6 +173,9 @@ public class GuiCreate extends JFrame{
                 }
             }
         });
+
+
+         */
         RetrocederButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
