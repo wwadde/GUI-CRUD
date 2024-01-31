@@ -1,0 +1,7 @@
+INSERT INTO dbo.credenciales (correo, password) VALUES ('prueba@gmail.com', 'asd123456987');
+INSERT INTO dbo.usuarios (usuarios_id, nombre, apellido, codigo) VALUES (1, 'william', 'wadde', '08545032202022');
+
+//Para reiniciar el autoincremento de la tabla
+DBCC CHECKIDENT ('dbo.credenciales', RESEED, 0);
+
+DELETE FROM dbo.credenciales;

@@ -34,15 +34,17 @@ public class Login extends JFrame {
         setContentPane(panelMadre);
         setTitle("Login");
         setSize(600, 550);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        setVisible(true);
 
         configurarDiseño();
 
         registrarBtn.addActionListener(e -> {
-            GuiCreate registro = new GuiCreate();
-            registro.setVisible(true);
-            registro.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            GuiRegistrar registro = new GuiRegistrar();
+            Login.this.dispose();
+
+
 
         });
 
@@ -71,7 +73,7 @@ public class Login extends JFrame {
 
     public static void main(String[] args) {
         Login frame = new Login();
-        frame.setVisible(true);
+
 
     }
 

@@ -22,30 +22,56 @@ import java.util.Vector;
 public class SqlConnection {
 
     private Properties creds = new Properties();
+    private String connectionString;
+
 
 
     public SqlConnection() {
         try {
+            // Crea un objeto FileInputStream para leer el archivo config.properties
             FileInputStream input = new FileInputStream("config.properties");
-            creds.load(input); //cargar las credenciales mediante la lectura que hace clase FileInputStream del archivo config.properties
+            // Carga las credenciales mediante la lectura que hace clase FileInputStream del archivo config.properties
+            creds.load(input);
+            // Inicializa la variable con la propiedad db.url que contiene la cadena de conexión
+            connectionString = creds.getProperty("db.url");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void insertarDatos(String codigo, String nombre, String apellido, String correo) {
-        String connectionString = creds.getProperty("db.url");
-        String sqlInsert = "INSERT INTO dbo.estudiantes (est_codigo,est_nombre, est_apellido, est_correo) VALUES (?,?,?,?);";
+    public void insertarDatos(Usuario usuario) {
 
+
+        String sqlInsert = "INSERT INTO dbo.credenciales (correo, password ) VALUES (?,?);";
+        String sqlInsert2 = "INSERT INTO dbo.usuarios (usuarios_id, nombre, apellido, codigo) VALUES (?,?,?,?);";
+
+        // Crear la conexión y el preparedStatement con un segundo parametro para obtener las llaves generadas
         try (Connection cnn = DriverManager.getConnection(connectionString);
-             PreparedStatement preparedStatement = cnn.prepareStatement(sqlInsert)) {
+             PreparedStatement preparedStatement = cnn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
+             PreparedStatement preparedStatement2 = cnn.prepareStatement(sqlInsert2)) {
 
-            preparedStatement.setString(1, codigo);
-            preparedStatement.setString(2, nombre);
-            preparedStatement.setString(3, apellido);
-            preparedStatement.setString(4, correo);
-
+            preparedStatement.setString(1, usuario.getCorreo());
+            preparedStatement.setString(2, usuario.getPassword());
             preparedStatement.executeUpdate();
+
+            ResultSet llaveGenerada = preparedStatement.getGeneratedKeys();
+            // Obtener la llave primaria generada, el metodo next mueve el cursor inicialmente al primer registro
+            if(llaveGenerada.next()){
+                int id = llaveGenerada.getInt(1);
+
+                preparedStatement2.setInt(1, id);
+                preparedStatement2.setString(2, usuario.getNombre());
+                preparedStatement2.setString(3, usuario.getApellido());
+                preparedStatement2.setString(4, usuario.getCodigo());
+                preparedStatement2.executeUpdate();
+
+            }
+            else {
+                throw new SQLException("No se generó la llave");
+            }
+
+
+
             JOptionPane.showMessageDialog(null,"Registrado con exito");
 
         } catch (SQLException e) {
@@ -53,8 +79,33 @@ public class SqlConnection {
         }
     }
 
+
+    public boolean usuarioExistente(String usuario) {
+
+        String query = "SELECT * FROM dbo.credenciales WHERE correo = ?;";
+
+        try (Connection cnn = DriverManager.getConnection(connectionString);
+             PreparedStatement preparedStatement = cnn.prepareStatement(query)) {
+
+            preparedStatement.setString(1, usuario);
+
+            try(ResultSet resultSet = preparedStatement.executeQuery()){
+
+                if (resultSet.next()) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            return false;
+        }
+    }
+
     public TableModel selectDatos() {
-        String connectionString = creds.getProperty("db.url");
+
         String query = "SELECT est_nombre, est_apellido, est_codigo, est_correo FROM dbo.estudiantes;";
 
         try (Connection cnn = DriverManager.getConnection(connectionString);
@@ -88,7 +139,7 @@ public class SqlConnection {
     }
 
     public TableModel buscarDato(String dato) {
-        String connectionString = creds.getProperty("db.url");
+
         String query = "SELECT * FROM dbo.estudiantes WHERE est_nombre LIKE ? OR est_apellido LIKE ? OR est_codigo LIKE ? OR est_correo LIKE ?;"; //define la consulta utilizando el operador LIKE para buscar coincidencias
 
         try (Connection cnn = DriverManager.getConnection(connectionString);
@@ -130,8 +181,8 @@ public class SqlConnection {
     }
 
     public boolean login(String usuario, String password) {
-        String connectionString = creds.getProperty("db.url");
-        String query = "SELECT * FROM dbo.usuarios WHERE usuario = ? AND password = ?;";
+
+        String query = "SELECT * FROM dbo.credenciales WHERE correo = ? AND password = ?;";
 
         try (Connection cnn = DriverManager.getConnection(connectionString);
              PreparedStatement preparedStatement = cnn.prepareStatement(query)) {
@@ -142,6 +193,7 @@ public class SqlConnection {
             try(ResultSet resultSet = preparedStatement.executeQuery()){
 
                 if (resultSet.next()) {
+                    JOptionPane.showMessageDialog(null, "Bienvenido");
                     return true;
                 } else {
                     return false;
