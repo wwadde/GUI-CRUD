@@ -1,14 +1,33 @@
 package org.GUI;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JTextField;
+import javax.swing.JPasswordField;
+import javax.swing.JOptionPane;
+import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+
 import java.util.Arrays;
 
 public class GuiRegistrar extends JFrame {
@@ -31,13 +50,12 @@ public class GuiRegistrar extends JFrame {
     private JPasswordField passwordField;
     private JPasswordField confirmarPasswordField;
     private JButton registrarBtn;
-    private JButton regresarBtn;
+    private JLabel regresarLabel;
 
 
     Color blancoColor = new Color(255, 255, 255, 202);
     Color grisColor = new Color(255, 255, 255, 89);
     Color azulColor = new Color(12, 106, 225, 186);
-    Color errorRojo = new Color(255, 0, 0, 100);
 
     private static final int numFilas = 6;
 
@@ -47,10 +65,8 @@ public class GuiRegistrar extends JFrame {
 
         setContentPane(panelMadre);
         setTitle("Registrar");
-        setSize(600, 550);
+        setSize(650, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setVisible(true);
 
         configurarDesign();
 
@@ -82,7 +98,7 @@ public class GuiRegistrar extends JFrame {
         confirmarpasswordJLayer = createLayeredTextField(confirmarPasswordField, "Confirmar Contraseña: ");
 
         registrarBtn = new JButton("Registrar");
-        regresarBtn = new JButton();
+        regresarLabel = new JLabel();
 
         panelMadre.add(panelContenido, BorderLayout.CENTER);
         panelMadre.setBorder(new EmptyBorder(50, 50, 50, 50));
@@ -91,8 +107,10 @@ public class GuiRegistrar extends JFrame {
         panelContenido.add(panelDatos, BorderLayout.CENTER);
         panelContenido.add(panelBotonRegistrar, BorderLayout.SOUTH);
 
-        panelBotonRegresar.add(regresarBtn);
+        panelBotonRegresar.add(regresarLabel);
+        panelBotonRegresar.setBorder(new EmptyBorder(10, 22, 10, 22));
         panelBotonRegistrar.add(registrarBtn);
+        panelBotonRegistrar.setBorder(new EmptyBorder(10, 22, 10, 22));
 
 
         panelDatos.add(nombreJLayer);
@@ -102,7 +120,6 @@ public class GuiRegistrar extends JFrame {
         panelDatos.add(passwordJLayer);
         panelDatos.add(confirmarpasswordJLayer);
         panelDatos.setBorder(new EmptyBorder(0, 22, 0, 22));
-
 
 
     }
@@ -121,11 +138,7 @@ public class GuiRegistrar extends JFrame {
         registrarBtn.setFont(new Font("Arial", Font.BOLD, 15));
 
         ImageIcon imagenRegresar = new ImageIcon("src/resources/Imagenes/regresarbtn.png");
-        regresarBtn.setIcon(imagenRegresar);
-        // Deshabilitar el pintado del fondo
-        regresarBtn.setContentAreaFilled(false);
-        // Deshabilitar el pintado del borde
-        regresarBtn.setBorderPainted(false);
+        regresarLabel.setIcon(imagenRegresar);
 
 
     }
@@ -133,39 +146,40 @@ public class GuiRegistrar extends JFrame {
 
     private void configurarEventos() {
 
-        regresarBtn.addActionListener(e -> {
-            GuiRegistrar.this.dispose();
-            Login login = new Login();
+        regresarLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                GuiRegistrar.this.dispose();
+                new Login();
+            }
         });
 
-        registrarBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        registrarBtn.addActionListener(e -> {
 
-                SqlConnection sqlConnection = new SqlConnection();
-                // Verificar que los campos no estén vacíos
-                if (nombreTF.getText().isEmpty() || apellidoTF.getText().isEmpty() || correoTF.getText().isEmpty() || codigoTF.getText().isEmpty() || passwordField.getPassword().length == 0 || confirmarPasswordField.getPassword().length == 0) {
-                    JOptionPane.showMessageDialog(null, "Por favor llene todos los campos");
+            SqlConnection sqlConnection = new SqlConnection();
+            // Verificar que los campos no estén vacíos
+            if (nombreTF.getText().isEmpty() || apellidoTF.getText().isEmpty() || correoTF.getText().isEmpty() || codigoTF.getText().isEmpty() || passwordField.getPassword().length == 0 || confirmarPasswordField.getPassword().length == 0) {
+                JOptionPane.showMessageDialog(null, "Por favor llene todos los campos");
                 // Verificar que las contraseñas coincidan
-                } else if (!Arrays.equals(passwordField.getPassword(), confirmarPasswordField.getPassword())) {
-                    JOptionPane.showMessageDialog(null, "Las contraseñas no coinciden");
-                // Verificar que el correo no esté registrado
-                } else if (sqlConnection.usuarioExistente(correoTF.getText())){
-                    JOptionPane.showMessageDialog(null, "El correo ya está registrado, escoja uno nuevo");
-                }else {
+            } else if (!Arrays.equals(passwordField.getPassword(), confirmarPasswordField.getPassword())) {
+                JOptionPane.showMessageDialog(null, "Las contraseñas no coinciden");
+            } else {
 
-                    // Instancio la clase Usuario. getPassword devuelve un arreglo de char, por eso se usa Arrays.toString
-                    Usuario usuario = new Usuario(nombreTF.getText(), apellidoTF.getText(), correoTF.getText(), codigoTF.getText(), String.valueOf(passwordField.getPassword()));
-                    sqlConnection.insertarDatos(usuario);
-                    GuiRegistrar.this.dispose();
-                    Login login = new Login();
-
-
+                // Rol 2 es para usuarios, asi que se asigna por defecto
+                int rol = 2;
+                // Instancio la clase Usuario. getPassword devuelve un arreglo de char, por eso se usa String.valueOf
+                Usuario usuario = new Usuario(nombreTF.getText(), apellidoTF.getText(), correoTF.getText(), codigoTF.getText(), String.valueOf(passwordField.getPassword()), rol);
+                // Devuelve true si el usuario ya existe
+                if (sqlConnection.insertarDatos(usuario)) {
+                    return;
                 }
-
+                GuiRegistrar.this.dispose();
+                new Login();
 
 
             }
+
+
         });
 
 
@@ -195,7 +209,7 @@ public class GuiRegistrar extends JFrame {
 
                 // Establecer el tamaño y la posición del JTextField y JLabel
                 textField.setBounds(0, 0, width - 45, height - 10);
-                helpLabel.setBounds(2, 0, width-45, height-10);
+                helpLabel.setBounds(2, 0, width - 45, height - 10);
                 // Establecer el tamaño preferido del JLayeredPane
                 layeredPane.setPreferredSize(new Dimension(width, height));
 
@@ -229,6 +243,148 @@ public class GuiRegistrar extends JFrame {
         });
 
         return layeredPane;
+    }
+
+    public JPanel getPanel(String correo) {
+
+        SqlConnection sqlConnection = new SqlConnection();
+
+        JComboBox<String> rolCB = new JComboBox<>();
+        rolCB.addItem("Administrador");
+        rolCB.addItem("Usuario");
+        rolCB.setFocusable(false);
+
+        Usuario usuario = sqlConnection.obtenerUsuario(correo);
+
+        nombreTF.setText(usuario.getNombre());
+        apellidoTF.setText(usuario.getApellido());
+        correoTF.setText(usuario.getCorreo());
+        codigoTF.setText(usuario.getCodigo());
+        passwordField.setText(usuario.getPassword());
+        confirmarPasswordField.setText(usuario.getPassword());
+        rolCB.setSelectedIndex(usuario.getRol() - 1);
+
+        panelBotonRegresar.remove(regresarLabel);
+        panelBotonRegistrar.remove(registrarBtn);
+        panelContenido.remove(panelDatos);
+        JPanel nuevoPanelDatos = new JPanel(new GridBagLayout());
+        nuevoPanelDatos.setBackground(blancoColor);
+        JLabel nombreLabel = new JLabel("Nombre: ");
+        JLabel apellidoLabel = new JLabel("Apellido: ");
+        JLabel correoLabel = new JLabel("Correo: ");
+        JLabel codigoLabel = new JLabel("Codigo: ");
+        JLabel passwordLabel = new JLabel("Contraseña: ");
+        JLabel confirmarPasswordLabel = new JLabel("Confirmar Contraseña: ");
+        JLabel rolLabel = new JLabel("Rol: ");
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(5, 10, 5, 10); // Para agregar un margen entre los componentes
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weighty = 1.0;
+        gbc.weightx = 0.20;
+
+        nuevoPanelDatos.add(nombreLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.weightx = 0.80;
+        nuevoPanelDatos.add(nombreTF, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weightx = 0.20;
+        nuevoPanelDatos.add(apellidoLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.weightx = 0.90;
+        nuevoPanelDatos.add(apellidoTF, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.weightx = 0.20;
+        nuevoPanelDatos.add(correoLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.weightx = 0.80;
+        nuevoPanelDatos.add(correoTF, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.weightx = 0.20;
+        nuevoPanelDatos.add(codigoLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.weightx = 0.80;
+        nuevoPanelDatos.add(codigoTF, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.weightx = 0.20;
+        nuevoPanelDatos.add(passwordLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.weightx = 0.80;
+        nuevoPanelDatos.add(passwordField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        gbc.weightx = 0.20;
+        nuevoPanelDatos.add(confirmarPasswordLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.weightx = 0.80;
+        nuevoPanelDatos.add(confirmarPasswordField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 6;
+        gbc.weightx = 0.20;
+        nuevoPanelDatos.add(rolLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.weightx = 0.80;
+        nuevoPanelDatos.add(rolCB, gbc);
+
+        panelContenido.add(nuevoPanelDatos, BorderLayout.CENTER);
+
+        JButton confirmarEdicionBtn = new JButton("Confirmar Cambios");
+        confirmarEdicionBtn.setBackground(azulColor);
+        confirmarEdicionBtn.setForeground(Color.WHITE);
+        confirmarEdicionBtn.setPreferredSize(new Dimension(200, 30));
+        panelBotonRegistrar.add(confirmarEdicionBtn);
+        passwordField.setEchoChar((char) 0);
+        confirmarPasswordField.setEchoChar((char) 0);
+
+        confirmarEdicionBtn.addActionListener(e -> {
+            if (nombreTF.getText().isEmpty() || apellidoTF.getText().isEmpty() || correoTF.getText().isEmpty() || codigoTF.getText().isEmpty() || passwordField.getPassword().length == 0 || confirmarPasswordField.getPassword().length == 0) {
+                JOptionPane.showMessageDialog(null, "Por favor llene todos los campos");
+            } else if (!Arrays.equals(passwordField.getPassword(), confirmarPasswordField.getPassword())) {
+                JOptionPane.showMessageDialog(null, "Las contraseñas no coinciden");
+            } else {
+
+                usuario.setNombre(nombreTF.getText());
+                usuario.setApellido(apellidoTF.getText());
+                usuario.setCorreo(correoTF.getText());
+                usuario.setCodigo(codigoTF.getText());
+                usuario.setPassword(String.valueOf(passwordField.getPassword()));
+                usuario.setRol(rolCB.getSelectedIndex() + 1);
+
+                sqlConnection.editarUsuario(usuario);
+                Inicio.panelContenido.removeAll();
+                Inicio.instanciaInicio.revalidate();
+                Inicio.instanciaInicio.repaint();
+
+                GuiMostrarTabla panel = new GuiMostrarTabla();
+                panel.tablaRegistros.setModel(sqlConnection.selectDatos());
+                Inicio.panelCentralCambiante = panel.getPanel();
+                Inicio.panelContenido.add(Inicio.panelCentralCambiante, BorderLayout.CENTER);
+                Inicio.instanciaInicio.revalidate();
+                Inicio.instanciaInicio.repaint();
+
+
+            }
+        });
+        return panelMadre;
     }
 }
 
