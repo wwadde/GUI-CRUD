@@ -2,7 +2,15 @@ package org.GUI;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
+
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Dimension;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 
 public class Login extends JFrame {
     private JPanel panelMadre;
@@ -33,18 +41,18 @@ public class Login extends JFrame {
 
         setContentPane(panelMadre);
         setTitle("Login");
-        setSize(600, 550);
+        setSize(650, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
 
-        configurarDiseño();
+        configurarDesign();
 
         registrarBtn.addActionListener(e -> {
             GuiRegistrar registro = new GuiRegistrar();
+            registro.setLocationRelativeTo(null);
+            registro.setVisible(true);
             Login.this.dispose();
-
-
 
         });
 
@@ -53,16 +61,30 @@ public class Login extends JFrame {
             String usuario = usuarioTF.getText();
             String password = String.valueOf(passwordField.getPassword());
 
-            if (usuario.equals("") || password.equals("")) {
+            Usuario user = sqlConnection.login(usuario, password);
+
+            if (usuario.isEmpty() || password.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Por favor ingrese todos los datos");
             } else {
-                if (sqlConnection.login(usuario, password)) {
-                    GuiMostrar mostrar = new GuiMostrar();
-                    mostrar.setVisible(true);
-                    mostrar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                if (user != null) {
+                    Inicio inicio = new Inicio(user);
+                    Inicio.instanciaInicio = inicio;
                     dispose();
                 } else {
-                    JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
+
+                    errorUserLabel.setText("Usuario Incorrecto");
+                    errorPassLabel.setText("Contraseña Incorrecta");
+                    // Se actualiza la interfaz para evitar errores
+                    revalidate();
+                    repaint();
+                    Timer timer = new Timer(10000, event -> {
+                        errorUserLabel.setText("");
+                        errorPassLabel.setText("");
+                        revalidate();
+                        repaint();
+                    });
+                    timer.setRepeats(false);
+                    timer.start();
                 }
             }
         });
@@ -72,8 +94,7 @@ public class Login extends JFrame {
 
 
     public static void main(String[] args) {
-        Login frame = new Login();
-
+        new Login();
 
     }
 
@@ -100,9 +121,6 @@ public class Login extends JFrame {
         registrarBtn = new JButton("Registrarse");
 
 
-
-
-
         panelMadre.setBackground(grisColor);
         panelContenido.setBackground(blancoColor);
 
@@ -124,7 +142,7 @@ public class Login extends JFrame {
 
     }
 
-    private void configurarDiseño() {
+    private void configurarDesign() {
 
         panelImagen.setBackground(blancoColor);
         panelDatos.setBackground(blancoColor);
@@ -142,10 +160,10 @@ public class Login extends JFrame {
         passwordField.setPreferredSize(new Dimension(0, 30));
 
         errorUserLabel.setForeground(errorRojo);
-        errorUserLabel.setFont(new Font("Arial", Font.BOLD, 11));
+        errorUserLabel.setFont(new Font("Arial", Font.BOLD, 13));
 
         errorPassLabel.setForeground(errorRojo);
-        errorPassLabel.setFont(new Font("Arial", Font.BOLD, 11));
+        errorPassLabel.setFont(new Font("Arial", Font.BOLD, 13));
 
         ingresarBtn.setBackground(azulColor);
         ingresarBtn.setForeground(Color.WHITE);
@@ -158,6 +176,7 @@ public class Login extends JFrame {
         registrarBtn.setForeground(azulColor);
         registrarBtn.setFont(new Font("Arial", Font.BOLD, 15));
         registrarBtn.setFocusPainted(false);
+        registrarBtn.setBorder(null);
 
         //Configuracion del panelDatos
         GridBagConstraints gbc = new GridBagConstraints();
@@ -197,7 +216,7 @@ public class Login extends JFrame {
 
         panelImagen.setBorder(new EmptyBorder(22, 0, 0, 0));
         panelDatos.setBorder(new EmptyBorder(0, 22, 0, 22));
-        panelBotones.setBorder(new EmptyBorder(11, 22, 22, 22));
+        panelBotones.setBorder(new EmptyBorder(0, 22, 22, 22));
 
 
     }
