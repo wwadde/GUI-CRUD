@@ -8,6 +8,7 @@ import java.awt.event.*;
 public class GuiMostrarTabla extends JFrame {
 
     private JPanel panelPrincipal;
+    private JPanel panelSuperior;
     public JTable tablaRegistros;
     private JScrollPane scrollPane;
     private JTextField searchInput;
@@ -31,46 +32,14 @@ public class GuiMostrarTabla extends JFrame {
     private final Color placeholderColor = Color.gray; // Color del placeholder
     private final Color textColor = Color.BLACK; // Color del texto
 
-    public GuiMostrarTabla(Inicio instancia){
-
-    }
     public GuiMostrarTabla() {
+        initComponents();
         setContentPane(panelPrincipal);
         setTitle("Mostrar Estudiantes");
         setBounds(500, 300, 800, 300);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        buscarPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
-        scrollPane.setBorder(new EmptyBorder(10, 10, 10, 10));
-        informacionLabel.setBorder(new EmptyBorder(10, 10, 10, 120));
-
-        buscarBtn.setBackground(azulColor);
-        buscarBtn.setForeground(Color.WHITE);
-        buscarBtn.setFont(fuenteTitulos);
-        editarBtn.setBackground(azulColor);
-        editarBtn.setForeground(Color.WHITE);
-        editarBtn.setFont(fuenteTitulos);
-        eliminarBtn.setBackground(azulColor);
-        eliminarBtn.setForeground(Color.WHITE);
-        eliminarBtn.setFont(fuenteTitulos);
-        MostrarTodoBtn.setBackground(azulColor);
-        MostrarTodoBtn.setForeground(Color.WHITE);
-        MostrarTodoBtn.setFont(fuenteTitulos);
-
-        comboBox1.addItem("Todos");
-        comboBox1.addItem("Usuario");
-        comboBox1.addItem("Administrador");
-
-        informacionLabel.setBounds(0, 0, 2, 1);
-        buscarBtn.setText("Buscar");
-        searchInput.setForeground(placeholderColor);
-        searchInput.setHorizontalAlignment(SwingConstants.CENTER);
-        searchInput.setColumns(2);
-        searchInput.setText("Ingrese el dato del estudiante a buscar");
-
-        MostrarTodoBtn.setText("Mostrar todos los registros");
-        tablaRegistros.setDefaultEditor(Object.class, null); // Para que no se pueda editar la tabla
 
         SqlConnection sql = new SqlConnection();
 
@@ -107,12 +76,14 @@ public class GuiMostrarTabla extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String dato = searchInput.getText();
 
-                if (dato.equals("Ingrese el dato del estudiante a buscar") || dato.isEmpty()) {
+                if (dato.equals("Ingrese el dato del usuario4 a buscar") || dato.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Ingrese un dato valido.");
+                    Inicio.instanciaInicio.revalidate();
                 } else {
 
                     tablaRegistros.setModel(sql.buscarDato(dato));
                     informacionLabel.setText("Se encontraron " + tablaRegistros.getRowCount() + " registros.");
+                    Inicio.instanciaInicio.revalidate();
                 }
 
 
@@ -170,9 +141,11 @@ public class GuiMostrarTabla extends JFrame {
                     sql.eliminarUsuario(usuarioSeleccionado);
                     tablaRegistros.setModel(sql.selectDatos());
                     informacionLabel.setText("Se encontraron " + tablaRegistros.getRowCount() + " registros.");
+                    Inicio.instanciaInicio.revalidate();
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "No se ha seleccionado un usuario para eliminar");
+                Inicio.instanciaInicio.revalidate();
             }
         });
     }
@@ -182,6 +155,93 @@ public class GuiMostrarTabla extends JFrame {
         return panelPrincipal;
 
     }
+
+    private void initComponents(){
+
+        panelPrincipal = new JPanel(new BorderLayout());
+        panelSuperior = new JPanel(new BorderLayout());
+        panelParametros = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        buscarPanel = new JPanel(new GridBagLayout());
+        panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+
+        tablaRegistros = new JTable();
+        scrollPane = new JScrollPane(tablaRegistros);
+
+        searchInput = new JTextField();
+        buscarBtn = new JButton("Buscar");
+        informacionLabel = new JLabel();
+        MostrarTodoBtn = new JButton("Mostrar todos los registros");
+        radioButton1 = new JRadioButton();
+        radioButton2 = new JRadioButton();
+        comboBox1 = new JComboBox();
+        editarBtn = new JButton("Editar");
+        eliminarBtn = new JButton("Eliminar");
+
+        panelPrincipal.add(panelSuperior, BorderLayout.NORTH);
+        panelPrincipal.add(scrollPane, BorderLayout.CENTER);
+        panelPrincipal.add(panelBotones, BorderLayout.SOUTH);
+
+        panelSuperior.add(informacionLabel, BorderLayout.NORTH);
+        panelSuperior.add(buscarPanel, BorderLayout.CENTER);
+        panelSuperior.add(panelParametros, BorderLayout.SOUTH);
+
+        panelBotones.add(editarBtn);
+        panelBotones.add(MostrarTodoBtn);
+        panelBotones.add(eliminarBtn);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 0.80;
+        gbc.weighty = 1;
+        gbc.fill = GridBagConstraints.BOTH;
+        buscarPanel.add(searchInput, gbc);
+        gbc.weightx = 0.20;
+        gbc.gridx = 1;
+        gbc.insets = new Insets(0, 20, 0, 0);
+        buscarPanel.add(buscarBtn, gbc);
+
+        panelParametros.add(radioButton1);
+        panelParametros.add(comboBox1);
+        panelParametros.add(radioButton2);
+
+
+
+        buscarPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        scrollPane.setBorder(new EmptyBorder(10, 10, 10, 10));
+        informacionLabel.setBorder(new EmptyBorder(10, 10, 10, 120));
+
+        buscarBtn.setBackground(azulColor);
+        buscarBtn.setForeground(Color.WHITE);
+        buscarBtn.setFont(fuenteTitulos);
+        buscarBtn.setFocusable(false);
+
+        editarBtn.setBackground(azulColor);
+        editarBtn.setForeground(Color.WHITE);
+        editarBtn.setFont(fuenteTitulos);
+
+        eliminarBtn.setBackground(azulColor);
+        eliminarBtn.setForeground(Color.WHITE);
+        eliminarBtn.setFont(fuenteTitulos);
+
+        MostrarTodoBtn.setBackground(azulColor);
+        MostrarTodoBtn.setForeground(Color.WHITE);
+        MostrarTodoBtn.setFont(fuenteTitulos);
+
+        comboBox1.addItem("Todos");
+        comboBox1.addItem("Usuario");
+        comboBox1.addItem("Administrador");
+
+        informacionLabel.setBounds(0, 0, 2, 1);
+
+        searchInput.setForeground(placeholderColor);
+        searchInput.setHorizontalAlignment(SwingConstants.CENTER);
+        searchInput.setColumns(2);
+
+        tablaRegistros.setDefaultEditor(Object.class, null); // Para que no se pueda editar la tabla
+
+    }
+
 }
 
 
