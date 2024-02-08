@@ -1,0 +1,50 @@
+Azure data studio - sql server
+
+CREATE TABLE [dbo].[credenciales] (
+    [credenciales_id] INT            IDENTITY (1, 1) NOT NULL,
+    [correo]          NVARCHAR (100) NOT NULL,
+    [password]        NVARCHAR (64)  NOT NULL,
+    PRIMARY KEY CLUSTERED ([credenciales_id] ASC),
+    UNIQUE NONCLUSTERED ([correo] ASC)
+);
+
+
+CREATE TABLE [dbo].[usuarios] (
+    [usuarios_id] INT           NOT NULL,
+    [nombre]      NVARCHAR (50) NOT NULL,
+    [apellido]    NVARCHAR (50) NOT NULL,
+    [codigo]      NVARCHAR (50) NOT NULL,
+    [roles_id]    INT           NOT NULL,
+    PRIMARY KEY CLUSTERED ([usuarios_id] ASC),
+    CONSTRAINT [FK_credenciales_id] FOREIGN KEY ([usuarios_id]) REFERENCES [dbo].[credenciales] ([credenciales_id]),
+    CONSTRAINT [FK_roles_id] FOREIGN KEY ([roles_id]) REFERENCES [dbo].[roles] ([roles_id])
+);
+
+
+CREATE TABLE [dbo].[roles] (
+    [roles_id] INT          IDENTITY (1, 1) NOT NULL,
+    [rol]      VARCHAR (20) NOT NULL,
+    CONSTRAINT [PK_roles] PRIMARY KEY CLUSTERED ([roles_id] ASC)
+);
+
+INSERT INTO dbo.credenciales (correo, password) VALUES ('admin@admin.com', 'admin')
+INSERT INTO dbo.usuarios (usuarios_id, nombre, apellido, codigo, roles_id) VALUES (1, 'admin', 'admin', 'admin', 1)
+
+//Para reiniciar el autoincremento de la tabla
+DBCC CHECKIDENT ('dbo.credenciales', RESEED, 0);
+
+DELETE FROM dbo.credenciales;
+
+ALTER TABLE dbo.roles ADD roles_id INT IDENTITY (1,1) NOT NULL
+ALTER TABLE dbo.roles DROP COLUMN roles_id
+ALTER TABLE dbo.roles DROP CONSTRAINT FK_roles_id
+
+SELECT rol.rol ROL , usu.nombre NOMBRE
+FROM dbo.usuarios AS usu
+JOIN dbo.roles AS rol ON usu.roles_id = rol.roles_id
+JOIN dbo.credenciales AS cred ON usu.usuarios_id = cred.credenciales_id
+WHERE rol.roles_id = 2
+
+SELECT * FROM dbo.usuarios AS usu
+JOIN dbo.credenciales AS cred ON usu.usuarios_id = cred.credenciales_id
+WHERE nombre LIKE '%adm%' OR apellido LIKE '%adm%'
