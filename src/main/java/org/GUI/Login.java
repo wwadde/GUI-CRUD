@@ -108,7 +108,7 @@ public class Login extends JFrame {
         panelBotones.setLayout(new BoxLayout(panelBotones, BoxLayout.X_AXIS)); //para que los botones queden uno al lado del otro
 
 
-        ImageIcon icon = new ImageIcon("src/resources/Imagenes/login.png");
+        ImageIcon icon = new ImageIcon(getClass().getResource("/Imagenes/login.png"));
         imagenLabel = new JLabel(icon);
         inicioLabel = new JLabel("Inicio de sesion");
         usuarioLabel = new JLabel("Usuario");

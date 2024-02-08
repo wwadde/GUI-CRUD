@@ -137,7 +137,7 @@ public class GuiRegistrar extends JFrame {
         registrarBtn.setPreferredSize(new Dimension(100, 30));
         registrarBtn.setFont(new Font("Arial", Font.BOLD, 15));
 
-        ImageIcon imagenRegresar = new ImageIcon("src/resources/Imagenes/regresarbtn.png");
+        ImageIcon imagenRegresar = new ImageIcon(getClass().getResource("/Imagenes/regresarbtn.png"));
         regresarLabel.setIcon(imagenRegresar);
 
 
