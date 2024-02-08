@@ -160,7 +160,7 @@ public class SqlConnection {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 DefaultTableModel modelo = new DefaultTableModel();
-                // Obtiene la metadata de la consulta para saber cuantas columnas tiene la tabla (5 en este caso)
+                // getMetaData retorna un objeto ResultSetMetaData que contiene informacion sobre la consulta
                 ResultSetMetaData metaData = resultSet.getMetaData();
 
                 modelo.addColumn("Nombre");
