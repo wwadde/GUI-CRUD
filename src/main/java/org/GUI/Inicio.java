@@ -21,7 +21,6 @@ public class Inicio extends JFrame {
     public static JPanel panelContenido;
     private JPanel panelBotones;
     private JButton verBtn;
-    private JButton agregarBtn;
     private JLabel bienvenidaLabel;
     private final Usuario usuario;
     public static JPanel panelCentralCambiante;
@@ -61,7 +60,6 @@ public class Inicio extends JFrame {
         panelCentralCambiante = new JPanel();
 
         verBtn = new JButton("Ver");
-        agregarBtn = new JButton("Agregar");
         bienvenidaLabel = new JLabel("Bienvenido");
         JPanel panelSuperiorIzquierdo = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel panelSuperiorDerecho = new JPanel(new BorderLayout());
@@ -74,10 +72,8 @@ public class Inicio extends JFrame {
         panelMadre.setBorder(new EmptyBorder(0, 60, 60, 60));
 
         verBtn.setPreferredSize(new Dimension(100, 40));
-        agregarBtn.setPreferredSize(new Dimension(100, 40));
 
         panelSuperiorIzquierdo.add(verBtn);
-        panelSuperiorIzquierdo.add(agregarBtn);
 
         panelSuperiorDerecho.add(bienvenidaLabel, BorderLayout.CENTER);
 
@@ -97,16 +93,10 @@ public class Inicio extends JFrame {
 
         // Quitamos el focus de los botones
         verBtn.setFocusable(false);
-        agregarBtn.setFocusable(false);
-
         verBtn.setBackground(azulColor);
-        agregarBtn.setBackground(azulColor);
-
         verBtn.setForeground(Color.WHITE);
-        agregarBtn.setForeground(Color.WHITE);
-
         verBtn.setFont(fuenteTitulos);
-        agregarBtn.setFont(fuenteTitulos);
+
         bienvenidaLabel.setFont(fuenteTitulos);
         bienvenidaLabel.setHorizontalAlignment(JLabel.CENTER);
         bienvenidaLabel.setVerticalAlignment(JLabel.CENTER);
