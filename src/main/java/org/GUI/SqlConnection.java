@@ -151,10 +151,8 @@ public class SqlConnection {
         try (Connection cnn = DriverManager.getConnection(connectionString);
              PreparedStatement preparedStatement = cnn.prepareStatement(query)) {
 
-            // Obtiene la metadata de la consulta para saber cuantas columnas tiene la tabla (5 en este caso)
-            ResultSetMetaData metaData = preparedStatement.getMetaData();
 
-            for (int i = 1; i <= metaData.getColumnCount(); i++) {
+            for (int i = 1; i <= 4; i++) {
 
                 preparedStatement.setString(i, "%" + dato + "%"); //el % es para que busque cualquier coincidencia
             }
@@ -162,7 +160,8 @@ public class SqlConnection {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 DefaultTableModel modelo = new DefaultTableModel();
-
+                // Obtiene la metadata de la consulta para saber cuantas columnas tiene la tabla (5 en este caso)
+                ResultSetMetaData metaData = resultSet.getMetaData();
 
                 modelo.addColumn("Nombre");
                 modelo.addColumn("Apellido");
