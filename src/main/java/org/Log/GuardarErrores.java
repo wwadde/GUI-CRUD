@@ -15,7 +15,7 @@ public class GuardarErrores {
         LOGGER = Logger.getLogger(clase.getName());
 
         try {
-            FileHandler fileHandler = new FileHandler("src/main/java/org/Logerrores.log", true); // true para que los logs se añadan al final del archivo append
+            FileHandler fileHandler = new FileHandler("src/main/java/org/Log/errores.log", true); // true para que los logs se añadan al final del archivo append
             LOGGER.addHandler(fileHandler);
             SimpleFormatter formatter = new SimpleFormatter();
             fileHandler.setFormatter(formatter);
