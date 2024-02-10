@@ -33,12 +33,6 @@
                     <include>**/*.png</include>
                 </includes>
             </resource>
-                 <resource>
-                      <directory>${project.basedir}</directory>
-                      <includes>
-                          <include>config.properties</include>
-                      </includes>
-                  </resource>
         </resources>
         <plugins>
             <!-- Agrega el plugin assembly de maven para que incluya dependencias -->
